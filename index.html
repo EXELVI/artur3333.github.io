@@ -24,10 +24,10 @@
         }
 
         .btn-instagram {
-            background-image: linear-gradient(45deg, #5851db, #8C11F7, #c13584, #e1306c, #FEBB26); 
+            background-image: linear-gradient(45deg, #5851db, #8C11F7, #c13584, #e1306c, #FEBB26);
             transition: background-image 0.5s ease;
         }
-    
+
         .btn-instagram:hover {
             background-image: linear-gradient(45deg, #3f3a9e, #6a0f7f, #a12b6f, #c92a5f, #d98e1d);
         }
@@ -47,10 +47,9 @@
                 <img src="/img/artur33.png" alt="Artur33 Avatar" class="profile-img">
                 <h5 class="card-title display-3">Artur33</h5>
                 <p class="card-text lead">
-                    I'm Artur, a python developer from Italy, I go in a technical institute with the address of computer
+                    I'm Artur, a Python developer from Italy, I go in a technical institute with the address of computer
                     science and telecommunications.</p>
-                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#main.about" aria-expanded="false"
-                    aria-controls="main.about">Read More</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAbout">Read More</button>
             </div>
 
         </div>
@@ -68,10 +67,10 @@
             </div>
             <div class="col-md-4">
                 <h5>Country</h5>
-                <i class="bi bi-geo-alt-fill"></i> 
+                <i class="bi bi-geo-alt-fill"></i>
                 <span>Italy</span>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" data-bs-toggle="modal" data-bs-target="#modalPyhon">
                 <h5>Favourite Language</h5>
                 <div class="python-text">
                     <i class="bi bi-code-slash"></i>
@@ -104,9 +103,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
-                <a href="https://github.com/artur3333" class="btn btn-dark m-1"
-                    style="border: 1px solid #fff;"><i class="bi bi-github"></i> GitHub</a>
-                <a href="https://www.instagram.com/artur_ciob_33/" class="btn btn-dark m-1 btn-instagram"><i class="bi bi-instagram"></i> Instagram</a>
+                <a href="https://github.com/artur3333" class="btn btn-dark m-1" style="border: 1px solid #fff;"><i
+                        class="bi bi-github"></i> GitHub</a>
+                <a href="https://www.instagram.com/artur_ciob_33/" class="btn btn-dark m-1 btn-instagram"><i
+                        class="bi bi-instagram"></i> Instagram</a>
                 <a href="https://twitter.com/Artur33834281" class="btn btn-primary m-1"><i class="bi bi-twitter"></i>
                     Twitter</a>
                 <a href="https://www.youtube.com/@artur333" class="btn btn-danger m-1"><i class="bi bi-youtube"></i>
@@ -115,8 +115,87 @@
         </div>
     </div>
 
-    <div 
+    <div class="modal fade" tabindex="-1" id="modalAbout">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">About Me</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>I'm Artur, a python developer from Italy, I go in a technical institute with the address of
+                        computer science and telecommunications.</p>
+                    <!-- Add more text here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+
+    <div class="modal fade" tabindex="-1" id="modalPyhon">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">About Me</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <pre><code class="language-python">def me():
+    print("I'm Artur")
+    print("I'm a Python developer")
+    print("I'm from Italy")
+    print("Favourite language: Python")
+    print("Favourite color: Blue")
+
+me()</code></pre>
+                    <button class="btn btn-primary" id="execute">Execute</button>
+                    <pre class="language-python"><code id="output"></code></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            Prism.highlightAll();
+
+            document.getElementById('execute').addEventListener('click', async () => {
+                document.getElementById('output').innerText = "Loading Python...\n";
+                let pyodide = await loadPyodide();
+                pyodide.runPython(`
+import sys
+from js import document
+
+class Console:
+    def __init__(self):
+        self.buffer = []
+
+    def write(self, s):
+        self.buffer.append(s)
+        output_element = document.getElementById('output')
+        output_element.innerText = ''.join(self.buffer)
+
+    def flush(self):
+        pass
+
+sys.stdout = Console()
+sys.stderr = Console()
+            `);
+                const lines = document.querySelector("pre code").innerText;
+                try {
+                    pyodide.runPython(lines);
+                } catch (e) {
+                    document.getElementById('output').innerText += e + "\n";
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
     <script src="/prism/prism.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
