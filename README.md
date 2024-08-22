@@ -21,7 +21,7 @@ This project is a personal portfolio website created for my friend, Artur. He di
 
 ## 🚀 Demo
 
-You can view the live website [here](https://artur3333.github.io).
+You can view the live website [here](https://exelvi.github.io/artur3333.github.io/).
 
 ## 📥 Installation
 
